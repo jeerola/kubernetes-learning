@@ -14,4 +14,8 @@ spec:
     spec:
       containers:
       - name: todo-app
-        image: eerola/todo-app:1.2
+        image: eerola/todo-app:1.5
+        imagePullPolicy: Always
+        env:
+          - name: PORT
+            value: "3000"
