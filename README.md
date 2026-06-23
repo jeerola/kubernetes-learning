@@ -10,3 +10,4 @@
 - [1.4](https://github.com/jeerola/kubernetes-learning/tree/1.4)
 - [1.5](https://github.com/jeerola/kubernetes-learning/tree/1.5)
 - [1.6](https://github.com/jeerola/kubernetes-learning/tree/1.6)
+- [1.7](https://github.com/jeerola/kubernetes-learning/tree/1.7)
