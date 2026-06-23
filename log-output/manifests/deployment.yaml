@@ -12,6 +12,17 @@ spec:
       labels:
         app: log-output
     spec:
+      volumes:
+        - name: hash-file
+          emptyDir: {}
       containers:
-      - name: log-output
-        image: eerola/log-output:1.7.3
+      - name: log-output-writer
+        image: eerola/log-output-writer:1.10.1
+        volumeMounts:
+        - name: hash-file
+          mountPath: /usr/src/app/files
+      - name: log-output-reader
+        image: eerola/log-output-reader:1.10.1
+        volumeMounts:
+        - name: hash-file
+          mountPath: /usr/src/app/files
