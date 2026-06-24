@@ -12,9 +12,16 @@ spec:
       labels:
         app: todo-app
     spec:
+      volumes:
+        - name: project-pv
+          persistentVolumeClaim:
+            claimName: project-claim
       containers:
       - name: todo-app
-        image: eerola/todo-app:1.8.1
+        image: eerola/todo-app:1.12.1
+        volumeMounts:
+        - name: project-pv
+          mountPath: /usr/src/app/project
         imagePullPolicy: Always
         env:
           - name: PORT
