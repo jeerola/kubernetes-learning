@@ -7,7 +7,7 @@ const getTimeStamp = () => new Date().toISOString();
 setInterval(() => {
   try {
     const fileContent = `${getTimeStamp()}: ${randomHash}`;
-    fs.writeFileSync("/usr/src/app/files/hashOutput.txt", fileContent);
+    fs.writeFileSync("/usr/src/app/files/hash-file.txt", fileContent);
   } catch (err) {
     console.error(err);
   }

@@ -15,7 +15,7 @@ spec:
       volumes:
         - name: hash-file
           persistentVolumeClaim:
-          claimName: hash-claim
+            claimName: hash-claim
       containers:
       - name: log-output-writer
         image: eerola/log-output-writer:1.11
