@@ -14,15 +14,16 @@ spec:
     spec:
       volumes:
         - name: hash-file
-          emptyDir: {}
+          persistentVolumeClaim:
+          claimName: hash-claim
       containers:
       - name: log-output-writer
-        image: eerola/log-output-writer:1.10.1
+        image: eerola/log-output-writer:1.11
         volumeMounts:
         - name: hash-file
           mountPath: /usr/src/app/files
       - name: log-output-reader
-        image: eerola/log-output-reader:1.10.1
+        image: eerola/log-output-reader:1.11
         volumeMounts:
         - name: hash-file
           mountPath: /usr/src/app/files
