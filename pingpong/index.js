@@ -28,3 +28,11 @@ pingPong.get("/pingpong", (req, res) => {
   }
   res.send(`pong ${pongCounter}`);
 });
+
+pingPong.get("/pings", (req, res) => {
+  try {
+    res.send(`${pongCounter}`);
+  } catch (err) {
+    console.error(err);
+  }
+});

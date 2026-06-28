@@ -12,16 +12,9 @@ spec:
       labels:
         app: pingpong
     spec:
-      volumes:
-        - name: hash-file
-          persistentVolumeClaim:
-            claimName: hash-claim
       containers:
       - name: pingpong
-        image: eerola/pingpong:1.11.1
-        volumeMounts:
-        - name: hash-file
-          mountPath: /usr/src/app/files
+        image: eerola/pingpong:2.1.3
         imagePullPolicy: Always
         env:
           - name: PORT
