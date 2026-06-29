@@ -1,6 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: project
   name: todo-app
 spec:
   replicas: 1
@@ -18,7 +19,7 @@ spec:
             claimName: project-claim
       containers:
       - name: todo-app
-        image: eerola/todo-app:2.2
+        image: eerola/todo-app:2.4
         volumeMounts:
         - name: project-pv
           mountPath: /usr/src/app/project
