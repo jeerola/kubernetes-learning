@@ -20,7 +20,7 @@ todoApp.listen(port, () => {
 });
 
 const fetchImage = async () => {
-  const image = await fetch("https://picsum.photos/200/300");
+  const image = await fetch(process.env.IMAGE_URL);
   const arrayBuffer = await image.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
   fs.writeFileSync("/usr/src/app/project/image.jpg", buffer);
