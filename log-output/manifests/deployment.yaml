@@ -16,16 +16,27 @@ spec:
       volumes:
         - name: hash-file
           emptyDir: {}
+        - name: config-volume
+          configMap:
+            name: greeting
       containers:
       - name: log-output-writer
-        image: eerola/log-output-writer:2.3
+        image: eerola/log-output-writer:2.5.1
         imagePullPolicy: Always
         volumeMounts:
         - name: hash-file
           mountPath: /usr/src/app/files
       - name: log-output-reader
-        image: eerola/log-output-reader:2.3
+        image: eerola/log-output-reader:2.5.1
         imagePullPolicy: Always
         volumeMounts:
         - name: hash-file
           mountPath: /usr/src/app/files
+        - name: config-volume
+          mountPath: /usr/src/app/config
+        env:
+        - name: MESSAGE
+          valueFrom:
+            configMapKeyRef:
+              name: greeting
+              key: MESSAGE
