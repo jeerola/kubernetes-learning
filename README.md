@@ -24,3 +24,4 @@
 - [2.2](https://github.com/jeerola/kubernetes-learning/tree/2.2/todo-backend)
 - [2.3](https://github.com/jeerola/kubernetes-learning/tree/2.3/log-output)
 - [2.4](https://github.com/jeerola/kubernetes-learning/tree/2.4/project)
+- [2.5](https://github.com/jeerola/kubernetes-learning/tree/2.5/log-output)
