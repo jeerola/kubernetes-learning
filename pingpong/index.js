@@ -1,38 +1,42 @@
 import express from "express";
 import fs from "node:fs";
+import { Pool } from "pg";
 
 const pingPong = express();
 const port = process.env.PORT || 3000;
+
+const pool = new Pool({
+  host: process.env.POSTGRES_HOST,
+  port: process.env.POSTGRES_PORT,
+  user: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+  database: process.env.POSTGRES_DB,
+});
+
+const client = await pool.connect();
+await client.query("CREATE TABLE IF NOT EXISTS counter (pong INT);")
+await client.query("INSERT INTO counter (pong) SELECT 0 WHERE NOT EXISTS (SELECT 1 FROM counter);")
 
 pingPong.listen(port, () => {
   console.log(`Server started in port ${port}`);
 });
 
-let pongCounter;
-
-try {
-  pongCounter = parseInt(
-    fs.readFileSync("/usr/src/app/files/ping-file.txt", "utf-8"),
-  );
-} catch (err) {
-  console.error(err);
-  pongCounter = 0;
-}
-
-pingPong.get("/pingpong", (req, res) => {
-  pongCounter++;
+pingPong.get("/pingpong", async (req, res) => {
   try {
-    fs.writeFileSync("/usr/src/app/files/ping-file.txt", String(pongCounter));
+    const result = await client.query("UPDATE counter SET pong = pong + 1 RETURNING pong");
+    res.send(`pong ${result.rows[0].pong}`);
   } catch (err) {
     console.error(err);
+    res.status(500).send("Database error");
   }
-  res.send(`pong ${pongCounter}`);
 });
 
-pingPong.get("/pings", (req, res) => {
+pingPong.get("/pings", async (req, res) => {
   try {
-    res.send(`${pongCounter}`);
+    const result = await client.query("SELECT * FROM counter");
+    res.send(`${result.rows[0].pong}`);
   } catch (err) {
     console.error(err);
+    res.status(500).send("Database error");
   }
 });
