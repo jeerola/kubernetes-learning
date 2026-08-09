@@ -1,7 +1,5 @@
-/**
- * Fetches all todolist items from backend
- * @returns todolist items in JSON format
- */
+const urlRegex = /(https?:)?\/\/[^\s]+/g;
+
 const getTodos = async () => {
   const response = await fetch("/todos");
   const todoItems = await response.json();
@@ -10,7 +8,15 @@ const getTodos = async () => {
 
 const renderTodoList = (todoItems) => {
   const ul = document.querySelector("ul");
-  ul.innerHTML = todoItems.map((todo) => `<li>${todo}</li>`).join("");
+  ul.innerHTML = todoItems
+    .map((todo) => {
+      const linked = todo.replace(
+        urlRegex,
+        (url) => `<a href="${url}" target="_blank">${url}</a>`,
+      );
+      return `<li>${linked}</li>`;
+    })
+    .join("");
 };
 
 const todoList = async () => {
