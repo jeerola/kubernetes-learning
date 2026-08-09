@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: project
+  name: postgres-claim
+spec:
+  storageClassName: postgres-project-pv
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi

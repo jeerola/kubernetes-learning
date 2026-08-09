@@ -15,8 +15,27 @@ spec:
     spec:
       containers:
       - name: todo-backend
-        image: eerola/todo-backend:2.4
+        image: eerola/todo-backend:2.8.2
         imagePullPolicy: Always
         env:
           - name: PORT
             value: "3000"
+          - name: POSTGRES_HOST
+            value: "postgres-stset"
+          - name: POSTGRES_PORT
+            value: "5432"
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgre-secrets
+                key: POSTGRES_PASSWORD
+          - name: POSTGRES_DB
+            valueFrom:
+              secretKeyRef:
+                name: postgre-secrets
+                key: POSTGRES_DB
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: postgre-secrets
+                key: POSTGRES_USER

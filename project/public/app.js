@@ -38,3 +38,8 @@ const createTodo = async (newTodo) => {
 
 todoList();
 document.querySelector("button").addEventListener("click", handleSend);
+document.querySelector("input").addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    handleSend();
+  }
+});
