@@ -26,3 +26,4 @@
 - [2.4](https://github.com/jeerola/kubernetes-learning/tree/2.4/project)
 - [2.5](https://github.com/jeerola/kubernetes-learning/tree/2.5/log-output)
 - [2.6](https://github.com/jeerola/kubernetes-learning/tree/2.6/project)
+- [2.7](https://github.com/jeerola/kubernetes-learning/tree/2.7/pingpong)
