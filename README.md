@@ -28,3 +28,4 @@
 - [2.6](https://github.com/jeerola/kubernetes-learning/tree/2.6/project)
 - [2.7](https://github.com/jeerola/kubernetes-learning/tree/2.7/pingpong)
 - [2.8](https://github.com/jeerola/kubernetes-learning/tree/2.8/todo-backend)
+- [2.9](https://github.com/jeerola/kubernetes-learning/tree/2.9/todo-fetcher)
