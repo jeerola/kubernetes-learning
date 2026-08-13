@@ -4,9 +4,8 @@ metadata:
   namespace: exercises
   name: postgres-claim
 spec:
-  storageClassName: postgres-pv
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: 1Gi
