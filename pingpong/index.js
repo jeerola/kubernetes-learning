@@ -14,20 +14,28 @@ const pool = new Pool({
 });
 
 const client = await pool.connect();
-await client.query("CREATE TABLE IF NOT EXISTS counter (pong INT);")
-await client.query("INSERT INTO counter (pong) SELECT 0 WHERE NOT EXISTS (SELECT 1 FROM counter);")
+await client.query("CREATE TABLE IF NOT EXISTS counter (pong INT);");
+await client.query(
+  "INSERT INTO counter (pong) SELECT 0 WHERE NOT EXISTS (SELECT 1 FROM counter);",
+);
 
 pingPong.listen(port, () => {
   console.log(`Server started in port ${port}`);
 });
 
+pingPong.get("/", (req, res) => {
+  res.status(200).json({ message: "Server okay" });
+});
+
 pingPong.get("/pingpong", async (req, res) => {
   try {
-    const result = await client.query("UPDATE counter SET pong = pong + 1 RETURNING pong");
+    const result = await client.query(
+      "UPDATE counter SET pong = pong + 1 RETURNING pong",
+    );
     res.send(`pong ${result.rows[0].pong}`);
   } catch (err) {
     console.error(err);
-    res.status(500).send("Database error");
+    res.status(500).json({ error: "Database error" });
   }
 });
 
@@ -37,6 +45,6 @@ pingPong.get("/pings", async (req, res) => {
     res.send(`${result.rows[0].pong}`);
   } catch (err) {
     console.error(err);
-    res.status(500).send("Database error");
+    res.status(500).json({ error: "Database error" });
   }
 });
