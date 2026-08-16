@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: todo-backend
-        image: eerola/todo-backend:2.10.1
+        image: eerola/todo-backend:3.5
         imagePullPolicy: Always
         env:
           - name: PORT
