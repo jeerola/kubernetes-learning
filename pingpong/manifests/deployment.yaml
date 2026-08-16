@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: pingpong
-        image: eerola/pingpong:3.2.1
+        image: eerola/pingpong:3.3
         imagePullPolicy: Always
         env:
           - name: PORT
