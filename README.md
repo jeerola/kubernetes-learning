@@ -35,3 +35,4 @@
 
 - [3.1](https://github.com/jeerola/kubernetes-learning/tree/3.1/pingpong)
 - [3.2](https://github.com/jeerola/kubernetes-learning/tree/3.2/pingpong)
+- [3.3](https://github.com/jeerola/kubernetes-learning/tree/3.3/log-output)
