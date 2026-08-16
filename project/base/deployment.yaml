@@ -19,7 +19,7 @@ spec:
             claimName: project-claim
       containers:
       - name: todo-app
-        image: eerola/todo-app:2.9.3
+        image: eerola/todo-app:3.5
         volumeMounts:
         - name: project-pv
           mountPath: /usr/src/app/project
