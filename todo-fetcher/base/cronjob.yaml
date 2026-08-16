@@ -11,7 +11,7 @@ spec:
         spec:
           containers:
             - name: todo-fetcher
-              image: eerola/todo-fetcher:2.9.3
+              image: eerola/todo-fetcher:3.5
               env:
                 - name: WIKIPEDIA_URL
                   value: "https://en.wikipedia.org/wiki/Special:Random"
