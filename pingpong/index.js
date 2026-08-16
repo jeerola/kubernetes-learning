@@ -23,16 +23,12 @@ pingPong.listen(port, () => {
   console.log(`Server started in port ${port}`);
 });
 
-pingPong.get("/", (req, res) => {
-  res.status(200).json({ message: "Server okay" });
-});
-
-pingPong.get("/pingpong", async (req, res) => {
+pingPong.get("/", async (req, res) => {
   try {
     const result = await client.query(
       "UPDATE counter SET pong = pong + 1 RETURNING pong",
     );
-    res.send(`pong ${result.rows[0].pong}`);
+    res.status(200).send(`pong ${result.rows[0].pong}`);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Database error" });

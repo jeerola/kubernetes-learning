@@ -21,3 +21,9 @@ spec:
     backendRefs:
     - name: pingpong
       port: 3456
+    filters:
+    - type: URLRewrite
+      urlRewrite:
+        path:
+          type: ReplacePrefixMatch
+          replacePrefixMatch: /
