@@ -20,6 +20,10 @@ todoBackend.listen(port, () => {
   console.log(`Server started in port ${port}`);
 });
 
+todoBackend.get("/", (req, res) => {
+  res.status(200).json({ message: "Server OK" });
+})
+
 todoBackend.get("/todos", async (req, res) => {
   try {
     const result = await client.query("SELECT * FROM todos;");

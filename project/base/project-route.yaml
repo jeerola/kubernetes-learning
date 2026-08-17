@@ -21,9 +21,3 @@ spec:
     backendRefs:
     - name: todo-backend
       port: 1234
-    filters:
-    - type: URLRewrite
-      urlRewrite:
-        path:
-          type: ReplacePrefixMatch
-          replacePrefixMatch: /

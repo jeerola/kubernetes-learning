@@ -3,3 +3,11 @@ kind: Kustomization
 resources:
   - ../../base
   - postgres-persistentvolumeclaim.yaml
+patches:
+  - target:
+      kind: StatefulSet
+      name: postgres-stset
+    patch: |-
+      - op: replace
+        path: /spec/volumeClaimTemplates/0/spec/storageClassName
+        value: standard-rwo
