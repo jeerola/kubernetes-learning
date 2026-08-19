@@ -38,3 +38,4 @@
 - [3.3](https://github.com/jeerola/kubernetes-learning/tree/3.3/log-output)
 - [3.4](https://github.com/jeerola/kubernetes-learning/tree/3.4/log-output)
 - [3.5](https://github.com/jeerola/kubernetes-learning/tree/3.5/todo-backend)
+- [3.6](https://github.com/jeerola/kubernetes-learning/tree/3.6/.github/workflows)
