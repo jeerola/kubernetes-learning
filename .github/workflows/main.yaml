@@ -60,7 +60,7 @@ jobs:
       - name: Deploy
         run: |-
           cd project/overlays/gke
-          kustomize edit set image $IMAGE=$IMAGE_TAG
+          kustomize edit set image eerola/$IMAGE=$IMAGE_TAG
           kustomize build . | kubectl apply -f -
           kubectl rollout status deployment $SERVICE -n project
           kubectl get services -o wide -n project
@@ -114,7 +114,7 @@ jobs:
       - name: Deploy
         run: |-
           cd todo-backend/overlays/gke
-          kustomize edit set image $IMAGE=$IMAGE_TAG
+          kustomize edit set image eerola/$IMAGE=$IMAGE_TAG
           kustomize build . | kubectl apply -f -
           kubectl rollout status deployment $SERVICE -n project
           kubectl get services -o wide -n project
@@ -168,6 +168,6 @@ jobs:
       - name: Deploy
         run: |-
           cd todo-fetcher/overlays/gke
-          kustomize edit set image $IMAGE=$IMAGE_TAG
+          kustomize edit set image eerola/$IMAGE=$IMAGE_TAG
           kustomize build . | kubectl apply -f -
           kubectl get cronjob $SERVICE -n project
