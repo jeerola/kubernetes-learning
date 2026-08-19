@@ -61,11 +61,23 @@ jobs:
 
       - name: Deploy
         run: |-
+          BRANCH=${GITHUB_REF#refs/heads/}
+
+          if [ "$BRANCH" = "main" ]; then
+            NAMESPACE=project
+          else
+            NAMESPACE=$BRANCH
+          fi
+
+          kubectl create namespace $NAMESPACE || true
+          kubectl config set-context --current --namespace=$NAMESPACE
+
           cd project/overlays/gke
+          kustomize edit set namespace $NAMESPACE
           kustomize edit set image eerola/$IMAGE=$IMAGE_TAG
           kustomize build . | kubectl apply -f -
-          kubectl rollout status deployment $SERVICE -n project
-          kubectl get services -o wide -n project
+          kubectl rollout status deployment $SERVICE
+          kubectl get services -o wide
 
   build-publish-deploy-todo-backend:
     name: Build, Publish and Deploy todo-backend
@@ -115,11 +127,23 @@ jobs:
 
       - name: Deploy
         run: |-
+          BRANCH=${GITHUB_REF#refs/heads/}
+
+          if [ "$BRANCH" = "main" ]; then
+            NAMESPACE=project
+          else
+            NAMESPACE=$BRANCH
+          fi
+
+          kubectl create namespace $NAMESPACE || true
+          kubectl config set-context --current --namespace=$NAMESPACE
+
           cd todo-backend/overlays/gke
+          kustomize edit set namespace $NAMESPACE
           kustomize edit set image eerola/$IMAGE=$IMAGE_TAG
           kustomize build . | kubectl apply -f -
-          kubectl rollout status deployment $SERVICE -n project
-          kubectl get services -o wide -n project
+          kubectl rollout status deployment $SERVICE
+          kubectl get services -o wide
 
   build-publish-deploy-todo-fetcher:
     name: Build, Publish and Deploy todo-fetcher
@@ -169,7 +193,19 @@ jobs:
 
       - name: Deploy
         run: |-
+          BRANCH=${GITHUB_REF#refs/heads/}
+
+          if [ "$BRANCH" = "main" ]; then
+            NAMESPACE=project
+          else
+            NAMESPACE=$BRANCH
+          fi
+
+          kubectl create namespace $NAMESPACE || true
+          kubectl config set-context --current --namespace=$NAMESPACE
+
           cd todo-fetcher/overlays/gke
+          kustomize edit set namespace $NAMESPACE
           kustomize edit set image eerola/$IMAGE=$IMAGE_TAG
           kustomize build . | kubectl apply -f -
-          kubectl get cronjob $SERVICE -n project
+          kubectl get cronjob $SERVICE
