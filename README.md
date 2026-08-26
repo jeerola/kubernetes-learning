@@ -41,3 +41,4 @@
 - [3.6](https://github.com/jeerola/kubernetes-learning/tree/3.6/.github/workflows)
 - [3.7](https://github.com/jeerola/kubernetes-learning/tree/3.7/.github/workflows)
 - [3.8](https://github.com/jeerola/kubernetes-learning/tree/3.8/.github/workflows)
+- [3.9](https://github.com/jeerola/kubernetes-learning/tree/3.9/project)
