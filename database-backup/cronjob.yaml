@@ -1,0 +1,63 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  namespace: project
+  name: database-backup
+spec:
+  schedule: "0 0 * * *" # run job every day
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: backup-sa
+          restartPolicy: OnFailure
+          initContainers:
+            - name: pg-dump
+              image: postgres:18
+              env:
+                - name: POSTGRES_HOST
+                  value: postgres-stset
+                - name: POSTGRES_PORT
+                  value: "5432"
+                - name: POSTGRES_DB
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgre-secrets
+                      key: POSTGRES_DB
+                - name: POSTGRES_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgre-secrets
+                      key: POSTGRES_USER
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgre-secrets
+                      key: POSTGRES_PASSWORD
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  pg_dump \
+                    -h "$POSTGRES_HOST" \
+                    -p "$POSTGRES_PORT" \
+                    -U "$POSTGRES_USER" \
+                    "$POSTGRES_DB" \
+                    > /backup/backup-$(date +%Y-%m-%d).sql
+              volumeMounts:
+                - name: backup
+                  mountPath: /backup
+
+          containers:
+            - name: upload
+              image: google/cloud-sdk:slim
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  gcloud storage cp /backup/*.sql gs://todo-project-backup/
+              volumeMounts:
+                - name: backup
+                  mountPath: /backup
+
+          volumes:
+            - name: backup
+              emptyDir: {}
