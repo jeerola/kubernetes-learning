@@ -42,3 +42,4 @@
 - [3.7](https://github.com/jeerola/kubernetes-learning/tree/3.7/.github/workflows)
 - [3.8](https://github.com/jeerola/kubernetes-learning/tree/3.8/.github/workflows)
 - [3.9](https://github.com/jeerola/kubernetes-learning/tree/3.9/project)
+- [3.10](https://github.com/jeerola/kubernetes-learning/tree/3.10/database-backup)
