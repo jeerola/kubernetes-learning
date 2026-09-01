@@ -13,19 +13,31 @@ const pool = new Pool({
   database: process.env.POSTGRES_DB,
 });
 
-const client = await pool.connect();
-await client.query("CREATE TABLE IF NOT EXISTS counter (pong INT);");
-await client.query(
-  "INSERT INTO counter (pong) SELECT 0 WHERE NOT EXISTS (SELECT 1 FROM counter);",
-);
-
 pingPong.listen(port, () => {
   console.log(`Server started in port ${port}`);
 });
 
+let client;
+
+try {
+  client = await pool.connect();
+
+  await client.query("CREATE TABLE IF NOT EXISTS counter (pong INT);");
+
+  await client.query(
+    "INSERT INTO counter (pong) SELECT 0 WHERE NOT EXISTS (SELECT 1 FROM counter);",
+  );
+} catch (err) {
+  console.error("Database not ready on startup");
+} finally {
+  if (client) {
+    client.release();
+  }
+}
+
 pingPong.get("/", async (req, res) => {
   try {
-    const result = await client.query(
+    const result = await pool.query(
       "UPDATE counter SET pong = pong + 1 RETURNING pong",
     );
     res.status(200).send(`pong ${result.rows[0].pong}`);
@@ -37,10 +49,19 @@ pingPong.get("/", async (req, res) => {
 
 pingPong.get("/pings", async (req, res) => {
   try {
-    const result = await client.query("SELECT * FROM counter");
+    const result = await pool.query("SELECT * FROM counter");
     res.send(`${result.rows[0].pong}`);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Database error" });
+  }
+});
+
+pingPong.get("/healthz", async (req, res) => {
+  try {
+    await pool.query("SELECT 1");
+    res.status(200).send();
+  } catch (err) {
+    res.status(503).json({ error: "Database service not ready" });
   }
 });

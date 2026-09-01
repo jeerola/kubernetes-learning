@@ -15,8 +15,21 @@ spec:
     spec:
       containers:
       - name: pingpong
-        image: eerola/pingpong:3.4
+        image: eerola/pingpong:4.1
+        resources:
+          requests:
+            cpu: "10m"
+            memory: "48Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
         imagePullPolicy: Always
+        readinessProbe:
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          httpGet:
+            path: /healthz
+            port: 3000
         env:
           - name: PORT
             value: "3000"

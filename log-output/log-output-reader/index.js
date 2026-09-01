@@ -34,3 +34,17 @@ logOutput.get("/", async (req, res) => {
     res.status(500).send("File not available");
   }
 });
+
+logOutput.get("/healthz", async (req, res) => {
+  try {
+    const response = await fetch("http://pingpong:3456/pings");
+
+    if (!response.ok) {
+      return res.status(503).json({ error: "PingPong service not ready" });
+    }
+
+    res.status(200).send();
+  } catch (err) {
+    return res.status(503).json({ error: "PingPong service not ready" });
+  }
+});
