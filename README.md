@@ -44,3 +44,4 @@
 - [3.9](https://github.com/jeerola/kubernetes-learning/tree/3.9/project)
 - [3.10](https://github.com/jeerola/kubernetes-learning/tree/3.10/database-backup)
 - [3.11](https://github.com/jeerola/kubernetes-learning/tree/3.11/todo-backend)
+- [3.12](https://github.com/jeerola/kubernetes-learning/tree/3.12/screenshots)
