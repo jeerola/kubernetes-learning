@@ -19,11 +19,11 @@ spec:
         type: PathPrefix
         value: /todos
     - path:
-      type: PathPrefix
-      value: /break
+        type: PathPrefix
+        value: /break
     - path:
-      type: PathPrefix
-      value: /livez
+        type: PathPrefix
+        value: /livez
     backendRefs:
     - name: todo-backend
       port: 1234
