@@ -49,14 +49,17 @@ const breakApp = async () => {
 
   if (response.ok) {
     const status = document.querySelector("#status-message");
-    status.textContent = "Application is broken...";
+
+    status.textContent = "Application is broken... Wait for Kubernetes to spin up a new pod...";
+    document.querySelector("ul").innerHTML = "";
 
     const interval = setInterval(async () => {
       try {
         const health = await fetch("/livez");
 
         if (health.ok) {
-          status.textContent = "Application is not broken anymore";
+          status.textContent = "Application is running normally again!";
+          await todoList();
 
           await new Promise((resolve) => setTimeout(resolve, 2000));
 

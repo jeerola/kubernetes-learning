@@ -73,9 +73,13 @@ todoBackend.get("/livez", (req, res) => {
 });
 
 todoBackend.get("/healthz", async (req, res) => {
+  if (!isHealthy) {
+    return res.status(503).json({ status: "unhealthy"});
+  }
+
   try {
     await pool.query("SELECT 1");
-    res.status(200).send();
+    res.status(200).json({ status: "OK" });
   } catch (err) {
     res.status(503).json({ error: "Database service not ready" });
   }
