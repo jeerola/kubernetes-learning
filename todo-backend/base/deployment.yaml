@@ -15,7 +15,22 @@ spec:
     spec:
       containers:
       - name: todo-backend
-        image: eerola/todo-backend:3.5.1
+        image: eerola/todo-backend:4.2
+
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+
+        livenessProbe:
+          httpGet:
+            path: /livez
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+
         resources:
           requests:
             cpu: "10m"
@@ -24,6 +39,7 @@ spec:
             cpu: "100m"
             memory: "128Mi"
         imagePullPolicy: Always
+
         env:
           - name: PORT
             value: "3000"

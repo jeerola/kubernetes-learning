@@ -5,6 +5,8 @@ const todoBackend = express();
 todoBackend.use(express.json());
 const port = process.env.PORT || 3000;
 
+let isHealthy = true; // used in /livez endpoint
+
 const pool = new Pool({
   host: process.env.POSTGRES_HOST,
   port: process.env.POSTGRES_PORT,
@@ -13,8 +15,11 @@ const pool = new Pool({
   database: process.env.POSTGRES_DB,
 });
 
-const client = await pool.connect();
-await client.query("CREATE TABLE IF NOT EXISTS todos (todo VARCHAR(140));");
+try {
+  await pool.query("CREATE TABLE IF NOT EXISTS todos (todo VARCHAR(140));");
+} catch (err) {
+  console.error("Database not ready on startup");
+}
 
 todoBackend.listen(port, () => {
   console.log(`Server started in port ${port}`);
@@ -22,15 +27,15 @@ todoBackend.listen(port, () => {
 
 todoBackend.get("/", (req, res) => {
   res.status(200).json({ message: "Server OK" });
-})
+});
 
 todoBackend.get("/todos", async (req, res) => {
   try {
-    const result = await client.query("SELECT * FROM todos;");
+    const result = await pool.query("SELECT * FROM todos;");
     res.json(result.rows.map((row) => row.todo));
   } catch (err) {
     console.error(err);
-    return res.status(500).json({error: "Failed to fetch TODO items"});
+    return res.status(500).json({ error: "Failed to fetch TODO items" });
   }
 });
 
@@ -47,7 +52,7 @@ todoBackend.post("/todos", async (req, res) => {
       return res.status(400).send("Too long TODO item");
     }
 
-    await client.query("INSERT INTO todos (todo) VALUES ($1)", [newTodoItem]);
+    await pool.query("INSERT INTO todos (todo) VALUES ($1)", [newTodoItem]);
     console.log(`${new Date().toISOString()} - New TODO: ${newTodoItem}`);
     res.status(201).json({
       message: "New TODO item created successfully",
@@ -57,4 +62,26 @@ todoBackend.post("/todos", async (req, res) => {
     console.error(`${new Date().toISOString()}`, err);
     return res.status(500).send("Failed to create TODO item");
   }
+});
+
+todoBackend.get("/livez", (req, res) => {
+  if (!isHealthy) {
+    return res.status(500).json({ status: "unhealthy" });
+  }
+
+  return res.status(200).json({ status: "healthy" });
+});
+
+todoBackend.get("/healthz", async (req, res) => {
+  try {
+    await pool.query("SELECT 1");
+    res.status(200).send();
+  } catch (err) {
+    res.status(503).json({ error: "Database service not ready" });
+  }
+});
+
+todoBackend.post("/break", (req, res) => {
+  isHealthy = false;
+  res.status(200).json({ status: "broken" });
 });

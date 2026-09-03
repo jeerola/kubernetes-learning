@@ -21,7 +21,7 @@ spec:
             claimName: project-claim
       containers:
       - name: todo-app
-        image: eerola/todo-app:3.5
+        image: eerola/todo-app:4.2
         resources:
           requests:
             cpu: "10m"

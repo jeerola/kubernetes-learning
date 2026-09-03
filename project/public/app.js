@@ -42,8 +42,37 @@ const createTodo = async (newTodo) => {
   todoList(); // refresh the list after creating new TODO
 };
 
+const breakApp = async () => {
+  const response = await fetch("/break", {
+    method: "POST",
+  });
+
+  if (response.ok) {
+    const status = document.querySelector("#status-message");
+    status.textContent = "Application is broken...";
+
+    const interval = setInterval(async () => {
+      try {
+        const health = await fetch("/livez");
+
+        if (health.ok) {
+          status.textContent = "Application is not broken anymore";
+
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+
+          status.textContent = "";
+          clearInterval(interval);
+        }
+      } catch (err) {
+        // Backend may be temporarily unavailable while Kubernetes restarts it
+      }
+    }, 2000);
+  }
+};
+
 todoList();
-document.querySelector("button").addEventListener("click", handleSend);
+document.querySelector("#create-button").addEventListener("click", handleSend);
+document.querySelector("#break-button").addEventListener("click", breakApp);
 document.querySelector("input").addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
     handleSend();
