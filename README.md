@@ -49,3 +49,4 @@
 ### Chapter 5
 
 - [4.1](https://github.com/jeerola/kubernetes-learning/tree/4.1/pingpong)
+- [4.2](https://github.com/jeerola/kubernetes-learning/tree/4.2/todo-backend)
