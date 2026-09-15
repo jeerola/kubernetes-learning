@@ -1,21 +1,32 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
   namespace: exercises
   name: pingpong
 spec:
-  replicas: 1
+  replicas: 2
+
+  strategy:
+    canary:
+      steps:
+        - setWeight: 50
+        - analysis:
+            templates:
+              - templateName: cpu-usage
+
   selector:
     matchLabels:
       app: pingpong
+
   template:
     metadata:
       labels:
         app: pingpong
+
     spec:
       containers:
       - name: pingpong
-        image: eerola/pingpong:4.1
+        image: eerola/pingpong:4.4.1
         resources:
           requests:
             cpu: "10m"
