@@ -51,3 +51,4 @@
 - [4.1](https://github.com/jeerola/kubernetes-learning/tree/4.1/pingpong)
 - [4.2](https://github.com/jeerola/kubernetes-learning/tree/4.2/todo-backend)
 - [4.3](https://github.com/jeerola/kubernetes-learning/tree/4.3/monitoring)
+- [4.4](https://github.com/jeerola/kubernetes-learning/tree/4.4/pingpong)
