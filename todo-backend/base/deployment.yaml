@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: todo-backend
-        image: eerola/todo-backend:4.2
+        image: eerola/todo-backend:4.5
 
         readinessProbe:
           httpGet:

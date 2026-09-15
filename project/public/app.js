@@ -8,13 +8,26 @@ const getTodos = async () => {
 
 const renderTodoList = (todoItems) => {
   const ul = document.querySelector("ul");
+
   ul.innerHTML = todoItems
     .map((todo) => {
-      const linked = todo.replace(
+      const linked = todo.todo.replace(
         urlRegex,
         (url) => `<a href="${url}" target="_blank">${url}</a>`,
       );
-      return `<li>${linked}</li>`;
+
+      const style = todo.done ? 'style="text-decoration: line-through;"' : "";
+
+      const button = todo.done
+        ? ""
+        : `<button onclick="doneTodo(${todo.id})">Done</button>`;
+
+      return `
+        <li ${style}>
+          <span>${linked}</span>
+          ${button}
+        </li>
+      `;
     })
     .join("");
 };
@@ -42,6 +55,20 @@ const createTodo = async (newTodo) => {
   todoList(); // refresh the list after creating new TODO
 };
 
+const doneTodo = async (id) => {
+  const response = await fetch(`/todos/${id}`, {
+    method: "PUT",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update TODO");
+  }
+
+  await todoList();
+};
+
+window.doneTodo = doneTodo;
+
 const breakApp = async () => {
   const response = await fetch("/break", {
     method: "POST",
@@ -50,7 +77,8 @@ const breakApp = async () => {
   if (response.ok) {
     const status = document.querySelector("#status-message");
 
-    status.textContent = "Application is broken... Wait for Kubernetes to spin up a new pod...";
+    status.textContent =
+      "Application is broken... Wait for Kubernetes to spin up a new pod...";
     document.querySelector("ul").innerHTML = "";
 
     const interval = setInterval(async () => {

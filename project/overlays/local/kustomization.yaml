@@ -4,3 +4,4 @@ resources:
   - ../../base
   - project-persistentvolume.yaml
   - project-persistentvolumeclaim.yaml
+  - ingress.yaml

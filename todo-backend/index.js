@@ -16,7 +16,14 @@ const pool = new Pool({
 });
 
 try {
-  await pool.query("CREATE TABLE IF NOT EXISTS todos (todo VARCHAR(140));");
+  await pool.query(
+    `CREATE TABLE IF NOT EXISTS todos (
+      id SERIAL PRIMARY KEY,
+      todo VARCHAR(140),
+      done BOOLEAN DEFAULT FALSE
+      );
+    `,
+  );
 } catch (err) {
   console.error("Database not ready on startup");
 }
@@ -31,8 +38,8 @@ todoBackend.get("/", (req, res) => {
 
 todoBackend.get("/todos", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM todos;");
-    res.json(result.rows.map((row) => row.todo));
+    const result = await pool.query("SELECT * FROM todos ORDER BY id ASC;");
+    res.json(result.rows);
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Failed to fetch TODO items" });
@@ -64,6 +71,26 @@ todoBackend.post("/todos", async (req, res) => {
   }
 });
 
+todoBackend.put("/todos/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await pool.query(
+      "UPDATE todos SET done = true WHERE id = $1 RETURNING *;",
+      [id],
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "TODO not found" });
+    }
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to update TODO" });
+  }
+});
+
 todoBackend.get("/livez", (req, res) => {
   if (!isHealthy) {
     return res.status(500).json({ status: "unhealthy" });
@@ -74,7 +101,7 @@ todoBackend.get("/livez", (req, res) => {
 
 todoBackend.get("/healthz", async (req, res) => {
   if (!isHealthy) {
-    return res.status(503).json({ status: "unhealthy"});
+    return res.status(503).json({ status: "unhealthy" });
   }
 
   try {
