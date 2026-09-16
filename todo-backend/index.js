@@ -1,5 +1,6 @@
 import express from "express";
 import { Pool } from "pg";
+import { connect } from "nats";
 
 const todoBackend = express();
 todoBackend.use(express.json());
@@ -15,6 +16,31 @@ const pool = new Pool({
   database: process.env.POSTGRES_DB,
 });
 
+let nc;
+
+const connectToNats = async () => {
+  nc = await connect({
+    servers: "nats://my-nats.nats.svc.cluster.local:4222",
+  });
+
+  console.log("Connected to NATS");
+};
+
+const startServer = async () => {
+  try {
+    await connectToNats();
+
+    todoBackend.listen(port, () => {
+      console.log(`Server started on port ${port}`);
+    });
+  } catch (err) {
+    console.error("Failed to start server:", err);
+    process.exit(1);
+  }
+};
+
+startServer();
+
 try {
   await pool.query(
     `CREATE TABLE IF NOT EXISTS todos (
@@ -27,10 +53,6 @@ try {
 } catch (err) {
   console.error("Database not ready on startup");
 }
-
-todoBackend.listen(port, () => {
-  console.log(`Server started in port ${port}`);
-});
 
 todoBackend.get("/", (req, res) => {
   res.status(200).json({ message: "Server OK" });
@@ -59,8 +81,21 @@ todoBackend.post("/todos", async (req, res) => {
       return res.status(400).send("Too long TODO item");
     }
 
-    await pool.query("INSERT INTO todos (todo) VALUES ($1)", [newTodoItem]);
+    const result = await pool.query(
+      "INSERT INTO todos (todo) VALUES ($1) RETURNING *;",
+      [newTodoItem],
+    );
+
     console.log(`${new Date().toISOString()} - New TODO: ${newTodoItem}`);
+
+    nc.publish(
+      "todos",
+      JSON.stringify({
+        event: "created",
+        todo: result.rows[0],
+      }),
+    );
+
     res.status(201).json({
       message: "New TODO item created successfully",
       todo: newTodoItem,
@@ -83,6 +118,14 @@ todoBackend.put("/todos/:id", async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "TODO not found" });
     }
+
+    nc.publish(
+      "todos",
+      JSON.stringify({
+        event: "updated",
+        todo: result.rows[0],
+      }),
+    );
 
     res.json(result.rows[0]);
   } catch (err) {
