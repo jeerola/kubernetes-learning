@@ -54,3 +54,5 @@
 - [4.4](https://github.com/jeerola/kubernetes-learning/tree/4.4/pingpong)
 - [4.5](https://github.com/jeerola/kubernetes-learning/tree/4.5/todo-backend)
 - [4.6](https://github.com/jeerola/kubernetes-learning/tree/4.6/broadcaster)
+- [4.7](https://github.com/jeerola/kubernetes-learning/tree/4.7/.github/workflows)
+  
