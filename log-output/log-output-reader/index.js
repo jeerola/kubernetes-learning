@@ -48,3 +48,5 @@ logOutput.get("/healthz", async (req, res) => {
     return res.status(503).json({ error: "PingPong service not ready" });
   }
 });
+
+// small modification for exercise 4.7 testing
