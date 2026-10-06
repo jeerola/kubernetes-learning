@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - project-persistentvolumeclaim.yaml
+  - project-persistentvolume.yaml
   - deployment.yaml
   - service.yaml
   - project-gateway.yaml
