@@ -1,4 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - cronjob.yaml
+- cronjob.yaml
+images:
+- name: eerola/todo-fetcher
+  newName: eerola/todo-fetcher
+  newTag: 70f121c9a4db3b05956688e4283070685a194b2c
