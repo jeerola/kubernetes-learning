@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
       - name: pingpong
-        image: eerola/pingpong:4.4.1
+        image: eerola/pingpong:4.7
         resources:
           requests:
             cpu: "10m"
