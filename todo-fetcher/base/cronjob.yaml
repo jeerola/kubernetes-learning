@@ -1,7 +1,6 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  namespace: project
   name: todo-fetcher
 spec:
   schedule: "0 * * * *" # cron expression for "every hour"
