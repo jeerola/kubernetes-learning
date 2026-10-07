@@ -29,6 +29,19 @@ images:
 
 patches:
   - target:
+      kind: Deployment
+      name: broadcaster
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/env
+        value:
+          - name: DISCORD_WEBHOOK_URL
+            valueFrom:
+              secretKeyRef:
+                name: discord-webhook
+                key: DISCORD_WEBHOOK_URL
+
+  - target:
       kind: Ingress
       name: project-ingress
     patch: |-
