@@ -4,8 +4,11 @@ on:
   push:
     branches:
       - main
+    tags:
+      - "**"
     paths-ignore:
-      - '**/*.md'
+      - "**/*.md"
+      - "environments/**"
   workflow_dispatch:
 
 permissions:
@@ -26,8 +29,11 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - uses: docker/setup-qemu-action@v3
-      - uses: docker/setup-buildx-action@v3
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Build and publish project
         run: |
@@ -53,25 +59,41 @@ jobs:
             --push \
             ./todo-fetcher
 
+      - name: Build and publish broadcaster
+        run: |
+          docker buildx build \
+            --platform linux/amd64,linux/arm64 \
+            --tag eerola/broadcaster:$GITHUB_SHA \
+            --push \
+            ./broadcaster
+
       - name: Set up Kustomize
         uses: imranismail/setup-kustomize@v3
 
-      - name: Update images
+      - name: Update staging images
+        if: github.ref == 'refs/heads/main'
         run: |
-          cd project/base
-          kustomize edit set image eerola/todo-app=eerola/todo-app:$GITHUB_SHA
+          cd environments/staging
+          kustomize edit set image \
+            eerola/todo-app=eerola/todo-app:$GITHUB_SHA \
+            eerola/todo-backend=eerola/todo-backend:$GITHUB_SHA \
+            eerola/todo-fetcher=eerola/todo-fetcher:$GITHUB_SHA \
+            eerola/broadcaster=eerola/broadcaster:$GITHUB_SHA
 
-          cd ../../todo-backend/base
-          kustomize edit set image eerola/todo-backend=eerola/todo-backend:$GITHUB_SHA
-
-          cd ../../todo-fetcher/base
-          kustomize edit set image eerola/todo-fetcher=eerola/todo-fetcher:$GITHUB_SHA
+      - name: Update production images
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          cd environments/production
+          kustomize edit set image \
+            eerola/todo-app=eerola/todo-app:$GITHUB_SHA \
+            eerola/todo-backend=eerola/todo-backend:$GITHUB_SHA \
+            eerola/todo-fetcher=eerola/todo-fetcher:$GITHUB_SHA \
+            eerola/broadcaster=eerola/broadcaster:$GITHUB_SHA
 
       - name: Commit updated Kustomize files
         uses: EndBug/add-and-commit@v10
         with:
           add: |
-            project/base/kustomization.yaml
-            todo-backend/base/kustomization.yaml
-            todo-fetcher/base/kustomization.yaml
-          message: "Release ${{ github.sha }}"
+            environments/staging/kustomization.yaml
+            environments/production/kustomization.yaml
+          message: "Release ${{ github.sha }} [skip ci]"
