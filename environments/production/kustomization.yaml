@@ -19,7 +19,7 @@ images:
     newTag: "4.5.1"
   - name: eerola/todo-backend
     newName: eerola/todo-backend
-    newTag: "4.5.1"
+    newTag: "4.6.1"
   - name: eerola/todo-fetcher
     newName: eerola/todo-fetcher
     newTag: "3.5"
