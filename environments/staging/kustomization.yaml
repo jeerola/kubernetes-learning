@@ -4,33 +4,33 @@ kind: Kustomization
 namespace: staging
 
 resources:
-  - namespace.yaml
-  - project-persistentvolume.yaml
-  - project-persistentvolumeclaim.yaml
-  - ../../project/base
-  - ../../todo-backend/base
-  - ../../todo-fetcher/base
-  - ../../broadcaster/base
+- namespace.yaml
+- project-persistentvolume.yaml
+- project-persistentvolumeclaim.yaml
+- ../../project/base
+- ../../todo-backend/base
+- ../../todo-fetcher/base
+- ../../broadcaster/base
 
 images:
-  - name: eerola/todo-app
-    newName: eerola/todo-app
-    newTag: "4.5.1"
-  - name: eerola/todo-backend
-    newName: eerola/todo-backend
-    newTag: "4.6.1"
-  - name: eerola/todo-fetcher
-    newName: eerola/todo-fetcher
-    newTag: "3.5"
-  - name: eerola/broadcaster
-    newName: eerola/broadcaster
-    newTag: "4.6.2"
+- name: eerola/broadcaster
+  newName: eerola/broadcaster
+  newTag: b75697e1d6a0b42247ce25862d5ec676badb6262
+- name: eerola/todo-app
+  newName: eerola/todo-app
+  newTag: b75697e1d6a0b42247ce25862d5ec676badb6262
+- name: eerola/todo-backend
+  newName: eerola/todo-backend
+  newTag: b75697e1d6a0b42247ce25862d5ec676badb6262
+- name: eerola/todo-fetcher
+  newName: eerola/todo-fetcher
+  newTag: b75697e1d6a0b42247ce25862d5ec676badb6262
 
 patches:
-  - target:
-      kind: Ingress
-      name: project-ingress
-    patch: |-
-      - op: add
-        path: /spec/rules/0/host
-        value: staging.localhost
+- patch: |-
+    - op: add
+      path: /spec/rules/0/host
+      value: staging.localhost
+  target:
+    kind: Ingress
+    name: project-ingress
