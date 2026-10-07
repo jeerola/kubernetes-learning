@@ -15,16 +15,16 @@ resources:
 images:
 - name: eerola/broadcaster
   newName: eerola/broadcaster
-  newTag: 1c27ba84996349a4fd368e14b21bb24ddd56ca22
+  newTag: f0e12d7cb3ae9c3b2de3ea7e89ce3294ab2e197c
 - name: eerola/todo-app
   newName: eerola/todo-app
-  newTag: 1c27ba84996349a4fd368e14b21bb24ddd56ca22
+  newTag: f0e12d7cb3ae9c3b2de3ea7e89ce3294ab2e197c
 - name: eerola/todo-backend
   newName: eerola/todo-backend
-  newTag: 1c27ba84996349a4fd368e14b21bb24ddd56ca22
+  newTag: f0e12d7cb3ae9c3b2de3ea7e89ce3294ab2e197c
 - name: eerola/todo-fetcher
   newName: eerola/todo-fetcher
-  newTag: 1c27ba84996349a4fd368e14b21bb24ddd56ca22
+  newTag: f0e12d7cb3ae9c3b2de3ea7e89ce3294ab2e197c
 
 patches:
 - patch: |-
