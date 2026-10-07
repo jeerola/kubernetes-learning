@@ -7,7 +7,14 @@ const nc = await connect({
 const sc = StringCodec();
 
 const sendToDiscord = async (text) => {
-  const response = await fetch(process.env.DISCORD_WEBHOOK_URL, {
+  const webhook = process.env.DISCORD_WEBHOOK_URL;
+
+  if (!webhook) {
+    console.log("Staging: not forwarding to Discord:", text);
+    return;
+  }
+
+  const response = await fetch(webhook, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
