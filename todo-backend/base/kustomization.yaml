@@ -8,4 +8,4 @@ resources:
 images:
 - name: eerola/todo-backend
   newName: eerola/todo-backend
-  newTag: 70f121c9a4db3b05956688e4283070685a194b2c
+  newTag: 5f08c56d7040d6c9c06b88b5e523b4c390dc0268
